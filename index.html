@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mini Online Shop</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .products, .cart { display: flex; gap: 20px; flex-wrap: wrap; }
+    .product, .cart-item { border: 1px solid #ccc; padding: 10px; width: 200px; }
+    button { background: #007bff; color: white; border: none; padding: 6px 10px; cursor: pointer; }
+    button:hover { background: #0056b3; }
+  </style>
+</head>
+<body>
+  <h1>🛒 Simple Online Shop</h1>
+
+  <h2>Products</h2>
+  <div class="products" id="products"></div>
+
+  <h2>Your Cart</h2>
+  <div class="cart" id="cart"></div>
+  <h3>Total: $<span id="total">0</span></h3>
+
+  <script>
+    const products = [
+      { id: 1, name: "Shirt", price: 25 },
+      { id: 2, name: "Shoes", price: 50 },
+      { id: 3, name: "Watch", price: 75 }
+    ];
+    const cart = {};
+
+    function renderProducts() {
+      const container = document.getElementById("products");
+      container.innerHTML = "";
+      products.forEach(p => {
+        const div = document.createElement("div");
+        div.className = "product";
+        div.innerHTML = `<h3>${p.name}</h3><p>$${p.price}</p>
+          <button onclick="addToCart(${p.id})">Add to Cart</button>`;
+        container.appendChild(div);
+      });
+    }
+
+    function renderCart() {
+      const container = document.getElementById("cart");
+      const totalEl = document.getElementById("total");
+      container.innerHTML = "";
+      let total = 0;
+      Object.values(cart).forEach(item => {
+        total += item.price * item.qty;
+        const div = document.createElement("div");
+        div.className = "cart-item";
+        div.innerHTML = `${item.name} x ${item.qty} - $${item.price * item.qty}`;
+        container.appendChild(div);
+      });
+      totalEl.textContent = total;
+    }
+
+    function addToCart(id) {
+      const product = products.find(p => p.id === id);
+      if (!cart[id]) cart[id] = { ...product, qty: 0 };
+      cart[id].qty++;
+      renderCart();
+    }
+
+    renderProducts();
+  </script>
+</body>
+</html>
